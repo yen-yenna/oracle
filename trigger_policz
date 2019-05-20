@@ -1,0 +1,16 @@
+create or replace TRIGGER POLICZ 
+BEFORE INSERT ON Faktura_detale
+for each row 
+declare 
+  cena number (7,2);
+  v_id_faktury number (7);
+  razem number(15,2);
+  BEGIN
+
+select id_faktury into v_id_faktury from faktura where id_faktury = :new.id_faktury;
+    select  cena_zwierzaka into cena from zwierzaki where id_zwierzaka = :NEW.id_zwierzaka;
+    razem := :new.ilosc * cena;
+    update faktura set wartosc = wartosc + razem where id_faktury = v_id_faktury;
+END;
+
+ 

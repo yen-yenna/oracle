@@ -1,0 +1,90 @@
+create or replace PACKAGE body GENERATOR_TRANSAKCI AS 
+
+ FUNCTION FN_DAJ_ILOSC  return number as
+ma number (7);
+BEGIN
+
+RETURN round(dbms_random.value(1,8));
+END FN_DAJ_ILOSC;
+
+FUNCTION FN_DAJ_KLIENTA RETURN NUMBER AS 
+mi number(7);
+ma number(7);
+BEGIN
+
+select min (id_klienta), max(id_klienta) into mi, ma from klient;
+  RETURN round(dbms_random.value(mi,ma));
+END FN_DAJ_KLIENTA;
+
+
+FUNCTION FN_DAJ_PLATNOSC RETURN NUMBER AS 
+mi number (7);
+ma number (7);
+BEGIN
+  select min(id_platnosci), max(id_platnosci) into mi, ma from platnosc;
+  RETURN round(dbms_random.value(mi,ma));
+END FN_DAJ_PLATNOSC;
+
+
+FUNCTION FN_DAJ_PRACOWNIKA RETURN NUMBER AS 
+mi number(7);
+ma number(7);
+BEGIN
+  
+  select min(id_pracownika), max(id_pracownika) into mi, ma from pracownicy;
+  return round(dbms_random.value(mi,ma));
+END FN_DAJ_PRACOWNIKA;
+
+
+FUNCTION FN_DAJ_PRODUKT RETURN NUMBER AS 
+mi number(4);
+ma number(4);
+BEGIN
+
+select min(id_zwierzaka), max(id_zwierzaka) into mi,ma from zwierzaki;
+  RETURN round(dbms_random.value(mi,ma));
+END FN_DAJ_PRODUKT;
+
+ FUNCTION FN_DAJ_CENE ( v_id_zwierzaka in NUMBER ) RETURN NUMBER AS 
+cena number (7,2);
+BEGIN
+ select cena_zwierzaka into cena from  zwierzaki where id_zwierzaka = v_id_zwierzaka;
+ return cena;
+END FN_DAJ_CENE;
+
+
+ PROCEDURE GENERUJ_TRANZAKCJE AS 
+v_id_faktury number(7);
+v_data_faktury date;
+v_id_klienta number(7);
+v_id_platnosci number(7);
+v_id_pracownika number(7);
+v_ilosc number(7);
+v_cena number(7,2);
+v_id_zwierzaka number(7);
+v_ilosc_zwierzaka number (7);
+
+BEGIN
+  v_id_faktury := SEQ_faktura.nextval;
+  v_data_faktury := sysdate;
+   
+  v_id_klienta := fn_daj_klienta();
+  v_id_platnosci := fn_daj_platnosc();
+  v_id_pracownika := fn_daj_pracownika();
+  
+   v_ilosc := fn_daj_ilosc();
+
+ 
+  
+  insert into faktura (id_faktury,data_faktury, wartosc, id_klienta, id_platnosci, id_pracownika)
+  values (v_id_faktury,v_data_faktury, 0 , v_id_klienta, v_id_platnosci, v_id_pracownika);
+  for i in 1..v_ilosc loop
+    v_id_zwierzaka := fn_daj_produkt();
+  v_ilosc_zwierzaka := fn_daj_ilosc();
+   v_cena := fn_daj_cene(v_id_zwierzaka);
+  insert into faktura_detale (ilosc,cena_zakupu,id_zwierzaka,id_faktury)
+  values(v_ilosc_zwierzaka,v_cena,v_id_zwierzaka,v_id_faktury);
+  end loop;
+END GENERUJ_TRANZAKCJE;
+
+END GENERATOR_TRANSAKCI;

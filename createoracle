@@ -1,0 +1,180 @@
+CREATE SEQUENCE SEQ_faktura;
+CREATE SEQUENCE SEQ_KLIENT;
+CREATE SEQUENCE SEQ_pracownicy;
+CREATE SEQUENCE SEQ_gatunku;
+CREATE SEQUENCE SEQ_platnosci;
+CREATE SEQUENCE SEQ_zwierzak;
+
+CREATE TABLE faktura (
+    id_faktury      NUMBER(7) NOT NULL,
+    data_faktury    DATE NOT NULL,
+    wartosc         NUMBER(15,2) NOT NULL,
+    id_klienta      NUMBER(7) NOT NULL,
+    id_platnosci    NUMBER(7) NOT NULL,
+    id_pracownika   NUMBER(7) NOT NULL
+);
+
+ALTER TABLE faktura ADD CONSTRAINT faktura_pk PRIMARY KEY ( id_faktury );
+
+CREATE TABLE faktura_detale (
+    ilosc          NUMBER(3),
+    cena_zakupu    NUMBER(7,2),
+    id_zwierzaka   NUMBER(7) NOT NULL,
+    id_faktury     NUMBER(7) NOT NULL
+);
+
+ALTER TABLE faktura_detale ADD CONSTRAINT faktura_detale_pk PRIMARY KEY ( id_faktury,id_zwierzaka );
+
+CREATE TABLE gatunek (
+    id_gatunku       NUMBER(7) NOT NULL,
+    nazwa_gatunku    VARCHAR2(40)
+   
+);
+
+ALTER TABLE gatunek ADD CONSTRAINT gatunek_pk PRIMARY KEY ( id_gatunku );
+
+CREATE TABLE klient (
+    id_klienta     NUMBER(7) NOT NULL,
+    imie           VARCHAR2(20),
+    nazwisko       VARCHAR2(40) NOT NULL,
+    ulica          VARCHAR2(40),
+    miasto         VARCHAR2(40),
+    kod_pocztowy   NUMBER(5),
+    telefon        NUMBER(9)
+);
+
+ALTER TABLE klient ADD CONSTRAINT klient_pk PRIMARY KEY ( id_klienta );
+
+CREATE TABLE platnosc (
+    id_platnosci       NUMBER(7) NOT NULL,
+    rodzaj_platnosci   VARCHAR2(40)
+);
+
+ALTER TABLE platnosc ADD CONSTRAINT platnosc_pk PRIMARY KEY ( id_platnosci );
+
+CREATE TABLE pracownicy (
+    id_pracownika         NUMBER(7) NOT NULL,
+    imie_pracownika       VARCHAR2(20),
+    nazwisko_pracownika   VARCHAR2(40)
+);
+
+ALTER TABLE pracownicy ADD CONSTRAINT pracownicy_pk PRIMARY KEY ( id_pracownika );
+
+CREATE TABLE zwierzaki (
+    id_zwierzaka     NUMBER(7) NOT NULL,
+    rodzaj_zwierzaka   VARCHAR2(40),
+    id_gatunku       NUMBER(7) NOT NULL,
+   cena_zwierzaka   NUMBER(7,2) NOT NULL
+);
+
+ALTER TABLE zwierzaki ADD CONSTRAINT zwierzaki_pk PRIMARY KEY ( id_zwierzaka );
+
+ALTER TABLE faktura_detale ADD CONSTRAINT faktura_fk FOREIGN KEY ( id_faktury )
+    REFERENCES faktura ( id_faktury );
+
+ALTER TABLE zwierzaki ADD CONSTRAINT gatunek_fk FOREIGN KEY ( id_gatunku )
+    REFERENCES gatunek ( id_gatunku );
+
+ALTER TABLE faktura ADD CONSTRAINT klient_fk FOREIGN KEY ( id_klienta )
+    REFERENCES klient ( id_klienta );
+
+ALTER TABLE faktura ADD CONSTRAINT platnosc_fk FOREIGN KEY ( id_platnosci )
+    REFERENCES platnosc ( id_platnosci );
+
+ALTER TABLE faktura ADD CONSTRAINT pracownicy_fk FOREIGN KEY ( id_pracownika )
+    REFERENCES pracownicy ( id_pracownika );
+
+ALTER TABLE faktura_detale ADD CONSTRAINT zwierzaki_fk FOREIGN KEY ( id_zwierzaka )
+    REFERENCES zwierzaki ( id_zwierzaka );
+
+insert into klient values ( SEQ_KLIENT.nextval, 'Gawic', 'Allacki', 'Zimna', 'Bialystok', '17456', '744456425');
+insert into klient values ( SEQ_KLIENT.nextval, 'Damian', 'Babacki', 'Smiszna', 'Ostrow', '74123', '123456789');
+insert into klient values ( SEQ_KLIENT.nextval, 'Adam', 'Abacki', 'Zmienna', 'Warszawa', '74125', '123456749');
+insert into klient values ( SEQ_KLIENT.nextval, 'Boromir', 'Cabacki', 'Dowcip', 'Szczecin', '35698', '698456425');
+insert into klient values ( SEQ_KLIENT.nextval, 'Robert', 'Dabacki', 'Elektra', 'Warszawa', '35693', '123457489');
+insert into klient values ( SEQ_KLIENT.nextval, 'Romfir', 'Ebacki', 'Elekcyjna', 'Warszawa', '25693', '123457123');
+insert into klient values ( SEQ_KLIENT.nextval, 'Krzysztof', 'Fabacki', 'Ujemna', 'Krakow', '74369', '528369741');
+insert into klient values ( SEQ_KLIENT.nextval, 'Edypt', 'Grecki', 'Antygony', 'Rzym', '36593', '789654123');
+insert into klient values ( SEQ_KLIENT.nextval, 'Antoni', 'Gabacki', 'Armi', 'Radom', '55593', '123456963');
+insert into klient values ( SEQ_KLIENT.nextval, 'Genowefa', 'Kabacka', 'Bialostocka', 'Bialystok', '46593', '357951123');
+insert into klient values ( SEQ_KLIENT.nextval, 'Maria', 'Mabacka', 'Koscielna', 'Szepietow', '56593', '789321123');
+insert into klient values ( SEQ_KLIENT.nextval, 'Olga', 'Sabacka', 'Krzyzowa', 'Modlin', '26593', '987654123');
+insert into klient values ( SEQ_KLIENT.nextval, 'Anna', 'Wamacka', 'Boleslawa', 'Krakow', '16593', '456654123');
+insert into klient values ( SEQ_KLIENT.nextval, 'Milena', 'Tabacka', 'Wiejska', 'Grudziac', '45593', '951654123');
+insert into klient values ( SEQ_KLIENT.nextval, 'Marek', 'Nabacki', 'Plebejusza', 'Warszawa', '15593', '151654123');
+insert into klient values ( SEQ_KLIENT.nextval, 'Tadeusz', 'Hubacki', 'Jesienna', 'Grudziac', '51593', '841654123');
+insert into klient values ( SEQ_KLIENT.nextval, 'Tomasz', 'Mubacki', 'Szalona', 'Otwock', '31526', '285936123');
+insert into klient values ( SEQ_KLIENT.nextval, 'Regina', 'Kacacka', 'Kulinarna', 'Olsztyn', '03626', '741936123');
+insert into klient values ( SEQ_KLIENT.nextval, 'Matylda', 'Drwalska', 'Bajkowa', 'Torun', '64501', '831764553');
+insert into klient values ( SEQ_KLIENT.nextval, 'Mulan', 'Fa', 'Chinska', 'Pekin', '01011', '414747242');
+insert into klient values ( SEQ_KLIENT.nextval, 'Fiona', 'Ogr', 'Bagienna', 'Zasiedmiogorogrod', '00141', '222111333');
+insert into klient values ( SEQ_KLIENT.nextval, 'Gaston', 'Wielki', 'Silna', 'Wioska', '07415', '789987789');
+select * from klient;
+
+insert into pracownicy values ( SEQ_pracownicy.nextval, 'Aldona', 'Kwiatkowska');
+insert into pracownicy values ( SEQ_pracownicy.nextval, 'Emil', 'Grzedowicz');
+insert into pracownicy values ( SEQ_pracownicy.nextval, 'Zuzanna', 'Zamienna');
+insert into pracownicy values ( SEQ_pracownicy.nextval, 'Alina', 'Kowalska');
+insert into pracownicy values ( SEQ_pracownicy.nextval, 'Marian', 'Wyrzykowski');
+insert into pracownicy values ( SEQ_pracownicy.nextval, 'Arkadiusz', 'Meczocy');
+insert into pracownicy values ( SEQ_pracownicy.nextval, 'Rozalia', 'Annopolska');
+insert into pracownicy values ( SEQ_pracownicy.nextval, 'Roman', 'Goralczyk');
+select * from pracownicy;
+
+insert into gatunek values ( SEQ_gatunku.nextval, 'pies');
+insert into gatunek values ( SEQ_gatunku.nextval, 'kot');
+insert into gatunek values ( SEQ_gatunku.nextval, 'chomik');
+insert into gatunek values ( SEQ_gatunku.nextval, 'szczur');
+insert into gatunek values ( SEQ_gatunku.nextval, 'panda');
+insert into gatunek values ( SEQ_gatunku.nextval, 'sowa');
+insert into gatunek values ( SEQ_gatunku.nextval, 'koala');
+insert into gatunek values ( SEQ_gatunku.nextval, 'alpaka');
+insert into gatunek values ( SEQ_gatunku.nextval, 'ryba');
+insert into gatunek values ( SEQ_gatunku.nextval, 'pajak');
+insert into gatunek values ( SEQ_gatunku.nextval, 'wilk');
+
+select * from gatunek;
+
+insert into platnosc values ( SEQ_platnosci.nextval, 'karta');
+insert into platnosc values ( SEQ_platnosci.nextval, 'gotowka');
+insert into platnosc values ( SEQ_platnosci.nextval, 'przelew');
+select * from platnosc;
+
+
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'owczarek niemiecki', '1', '700');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'szczur szary', '4', '20');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'tarantula',  '10', '1');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'koala zwykla', '7', '30000');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'chomik chinski',  '3', '65');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'biala alpaka',  '8', '8000');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'sniezna sowa', '6', '6000');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'panda ruda',  '5', '13000');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'bialy wilk', '11', '35000');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'szary wilk', '11', '1000');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'husky',  '1', '900');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'szczur miniaturka',  '4', '50');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'kot perski',  '2', '1200');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'munchkin',  '2', '1700');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'syjamski',  '2', '300');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'yorkshire terier', '1', '450');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'samoyed', '1', '860');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'chomik syjamski',  '3', '30');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'sum',  '9', '75');
+insert into zwierzaki values ( SEQ_zwierzak.nextval, 'nemo',  '9', '150');
+select * from zwierzaki;
+
+create or replace view najbardziej_popularny_gatunek
+as
+select nazwa_gatunku, sum(ilosc) as zakupione_zwierzaki 
+from gatunek g, faktura_detale fd, zwierzaki z
+where g.id_gatunku = z.id_gatunku and fd.id_zwierzaka = z.id_zwierzaka
+group by nazwa_gatunku
+order by 2 desc;
+
+create or replace view ile_pieniedzy_wydal_klient_i_ile_kupil
+as 
+select imie, nazwisko, sum(fd.ilosc) as kupione_zwierzaki, sum(f.wartosc) as wydane_pieniadze 
+from klient k, faktura f, faktura_detale fd 
+where f.id_klienta = k.id_klienta and fd.id_faktury = f.id_faktury
+group by imie, nazwisko 
+order by 4 desc;
